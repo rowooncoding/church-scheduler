@@ -1,22 +1,20 @@
-import { Link } from 'expo-router';
 import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View, Image, Pressable } from "react-native";
 
 const logo = require("@/assets/images/ahaba-logo.png");
 
-const LoginScreen: React.FC = () => {
+const SignupScreen: React.FC = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView style={styles.avoidContainer} behavior={Platform.OS === "ios" ? "padding" : "height"}>
         <View style={styles.container}>
           <View style={styles.inputContainer}>
             <Image source={logo} style={styles.logo} />
+            <TextInput style={styles.inputs} placeholder="이름" />
             <TextInput style={styles.inputs} placeholder="이메일" />
             <TextInput style={styles.inputs} placeholder="비밀번호" secureTextEntry />
-            <TextInput style={styles.inputs} placeholder="교회코드" secureTextEntry />
-            <Pressable style={styles.loginButton}>
-              <Text style={styles.loginButtonText}>로그인</Text>
+            <Pressable style={styles.signupButton}>
+              <Text style={styles.signupButtonText}>회원가입</Text>
             </Pressable>
-            <Link href="/signup" style={styles.signupText}>회원가입</Link>
           </View>
         </View>
       </KeyboardAvoidingView>
@@ -58,7 +56,7 @@ const styles = StyleSheet.create({
     width: 400,
     height: 100,
   },
-  loginButton: {
+  signupButton: {
     width: "100%",
     padding: 15,
     backgroundColor: "#007BFF",
@@ -66,7 +64,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
   },
-  loginButtonText: {
+  signupButtonText: {
     color: "#FFFFFF",
     fontSize: 16,
   },
@@ -78,4 +76,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default SignupScreen;
