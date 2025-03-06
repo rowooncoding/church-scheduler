@@ -29,11 +29,23 @@ export const registerUser = createAsyncThunk(
         body: JSON.stringify({ name, email, password }),
       });
 
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "회원가입 중 오류가 발생하였습니다. 관리자에게 문의하세요");
-      }
-      return data;
+    // 응답이 JSON인지 확인 후 파싱
+    const contentType = response.headers.get("content-type");
+    let data;
+
+    if (contentType && contentType.includes("application/json")) {
+      data = await response.json();
+    } else {
+      const text = await response.text();
+      console.error("❌ 예상치 못한 응답:", text);
+      throw new Error("서버에서 올바른 JSON 응답을 보내지 않았습니다.");
+    }
+
+    if (!response.ok) {
+      throw new Error(data.message || "회원가입 중 오류가 발생했습니다.");
+    }
+
+    return data; // ✅ 정상 응답 반환
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
