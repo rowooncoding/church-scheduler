@@ -1,21 +1,54 @@
-import { Link } from 'expo-router';
-import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View, Image, Pressable } from "react-native";
+import { loginUser } from '@/redux/authSlice';
+import { AppDispatch, RootState } from '@/redux/store';
+import { Link, useRouter } from 'expo-router';
+import { useState } from 'react';
+import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View, Image, Pressable, Alert, ActivityIndicator } from "react-native";
+import { useDispatch, useSelector } from 'react-redux';
 
 const logo = require("@/assets/images/ahaba-logo.png");
 
 const LoginScreen: React.FC = () => {
+  const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+  const { loading, error, user } = useSelector((state: RootState) => state.auth);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert("오류", "이메일과 비밀번호를 입력해주세요.");
+      return;
+    }
+
+    console.log("🚀 로그인 요청 시작");
+
+    const resultAction = await dispatch(loginUser({ email, password }));
+
+    console.log("🔥 Redux 액션 실행 완료:", resultAction);
+
+    if (loginUser.fulfilled.match(resultAction)) {
+      console.log("✅ 로그인 성공! 홈 화면으로 이동");
+      Alert.alert("로그인 성공!", "홈 화면으로 이동합니다.");
+      router.replace("/(tabs)"); // ✅ 로그인 성공 시 홈으로 이동
+    } else {
+      console.log("❌ 로그인 실패: ", resultAction.payload);
+      Alert.alert("로그인 실패", typeof resultAction.payload === 'string' ? resultAction.payload : "로그인 중 오류가 발생했습니다.");
+    }
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView style={styles.avoidContainer} behavior={Platform.OS === "ios" ? "padding" : "height"}>
         <View style={styles.container}>
           <View style={styles.inputContainer}>
             <Image source={logo} style={styles.logo} />
-            <TextInput style={styles.inputs} placeholder="이메일" />
-            <TextInput style={styles.inputs} placeholder="비밀번호" secureTextEntry />
-            <TextInput style={styles.inputs} placeholder="교회코드" secureTextEntry />
-            <Pressable style={styles.loginButton}>
-              <Text style={styles.loginButtonText}>로그인</Text>
+            <TextInput style={styles.inputs} placeholder="이메일" value={email} onChangeText={setEmail} keyboardType="email-address" />
+            <TextInput style={styles.inputs} placeholder="비밀번호" value={password} onChangeText={setPassword} secureTextEntry />
+            <Pressable style={styles.loginButton} onPress={handleLogin} disabled={loading}>
+              {loading ? <ActivityIndicator color="#FFFFFF" /> : <Text style={styles.loginButtonText}>로그인</Text>}
             </Pressable>
+            {error && <Text style={styles.errorText}>{error}</Text>}
             <Link href="/signup" style={styles.signupText}>회원가입</Link>
           </View>
         </View>
@@ -75,6 +108,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 20,
     textDecorationLine: "underline", // 밑줄
+  },
+  errorText: {
+    color: "red",
+    marginTop: 10,
   },
 });
 

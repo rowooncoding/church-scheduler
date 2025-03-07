@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 interface AuthState {
@@ -8,13 +9,58 @@ interface AuthState {
   };
   loading: boolean;
   error: string | null;
+  token: string | null;
 }
 
 const initialState: AuthState = {
   user: null,
   loading: false,
   error: null,
+  token: null,
 };
+
+// 로그인 (비동기 처리)
+export const loginUser = createAsyncThunk(
+  "auth/loginUser",
+  async ({ email, password }: { email: string; password: string }, { rejectWithValue }) => {
+    try {
+      console.log("🔥 Redux 비동기 액션 실행 중...");
+
+      const response = await fetch("https://church-scheduler-server.onrender.com/api/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      console.log("🔥 서버 응답 수신 완료", response);
+
+      const contentType = response.headers.get("content-type");
+
+      let data;
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        console.error("❌ 서버에서 JSON이 아닌 응답을 반환함:", text);
+        throw new Error("서버에서 올바른 JSON 응답을 보내지 않았습니다.");
+      }
+
+      if (!response.ok) {
+        console.error("❌ 로그인 실패 (서버 응답 오류):", data.message);
+        throw new Error(data.message || "로그인 실패");
+      }
+
+      await AsyncStorage.setItem("jwt_token", data.token);
+
+      console.log("✅ 로그인 성공!", data);
+
+      return data;
+    } catch (error: any) {
+      console.error("❌ Redux 로그인 오류 발생:", error.message);
+      return rejectWithValue(error.message);
+    }
+  }
+)
 
 // 비동기 회원가입
 export const registerUser = createAsyncThunk(
@@ -56,7 +102,13 @@ export const registerUser = createAsyncThunk(
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    logout: (state) => {
+      state.user = null;
+      state.token = null;
+      AsyncStorage.removeItem("jwt_token");
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
@@ -74,4 +126,5 @@ const authSlice = createSlice({
   },
 });
 
+export const { logout } = authSlice.actions;
 export default authSlice.reducer;
