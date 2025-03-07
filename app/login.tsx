@@ -1,3 +1,4 @@
+import Button from '@/component/Button';
 import { loginUser } from '@/redux/authSlice';
 import { AppDispatch, RootState } from '@/redux/store';
 import { Link, useRouter } from 'expo-router';
@@ -45,9 +46,7 @@ const LoginScreen: React.FC = () => {
             <Image source={logo} style={styles.logo} />
             <TextInput style={styles.inputs} placeholder="이메일" value={email} onChangeText={setEmail} keyboardType="email-address" />
             <TextInput style={styles.inputs} placeholder="비밀번호" value={password} onChangeText={setPassword} secureTextEntry />
-            <Pressable style={styles.loginButton} onPress={handleLogin} disabled={loading}>
-              {loading ? <ActivityIndicator color="#FFFFFF" /> : <Text style={styles.loginButtonText}>로그인</Text>}
-            </Pressable>
+            <Button name='login' onPress={handleLogin} disabled={loading} />
             {error && <Text style={styles.errorText}>{error}</Text>}
             <Link href="/signup" style={styles.signupText}>회원가입</Link>
           </View>

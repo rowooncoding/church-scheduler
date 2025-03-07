@@ -1,3 +1,4 @@
+import Button from '@/component/Button';
 import { registerUser } from '@/redux/authSlice';
 import { AppDispatch, RootState } from '@/redux/store';
 import { useRouter } from 'expo-router';
@@ -42,9 +43,7 @@ const SignupScreen: React.FC = () => {
             <TextInput style={styles.inputs} placeholder="이름" value={name} onChangeText={setName} />
             <TextInput style={styles.inputs} placeholder="이메일" value={email} onChangeText={setEmail} keyboardType="email-address" />
             <TextInput style={styles.inputs} placeholder="비밀번호" value={password} onChangeText={setPassword} secureTextEntry />
-            <Pressable style={styles.signupButton} onPress={handleSignup} disabled={loading}>
-              {loading ? <ActivityIndicator color="#FFFFFF" /> : <Text style={styles.signupButtonText}>회원가입</Text>}
-            </Pressable>
+            <Button name='signup' onPress={handleSignup} disabled={loading} />
             {error && <Text style={styles.errorText}>{error}</Text>}
           </View>
         </View>

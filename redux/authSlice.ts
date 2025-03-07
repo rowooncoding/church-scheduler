@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, isRejectedWithValue } from "@reduxjs/toolkit";
 
 interface AuthState {
   user: null | {
@@ -98,17 +98,23 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+export const logoutUser = createAsyncThunk<void, void>(
+  "auth/logoutUser", 
+  async (_, { rejectWithValue }) => {
+    try {
+      await AsyncStorage.removeItem("jwt_token");
+     // return true;
+    } catch (error: any) {
+      console.log("❌ 로그아웃 오류 발생:", error.message);
+      return rejectWithValue(error.message);
+    }
+});
+
 // 슬라이스 생성
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {
-    logout: (state) => {
-      state.user = null;
-      state.token = null;
-      AsyncStorage.removeItem("jwt_token");
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
@@ -122,9 +128,12 @@ const authSlice = createSlice({
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
-      });
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.user = null;
+        state.token = null; 
+      })
   },
 });
 
-export const { logout } = authSlice.actions;
 export default authSlice.reducer;
