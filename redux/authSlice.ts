@@ -103,7 +103,6 @@ export const logoutUser = createAsyncThunk<void, void>(
   async (_, { rejectWithValue }) => {
     try {
       await AsyncStorage.removeItem("jwt_token");
-     // return true;
     } catch (error: any) {
       console.log("❌ 로그아웃 오류 발생:", error.message);
       return rejectWithValue(error.message);

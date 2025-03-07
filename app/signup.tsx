@@ -1,4 +1,5 @@
 import Button from '@/component/Button';
+import CustomTextInput from '@/component/CustomTextInput';
 import { registerUser } from '@/redux/authSlice';
 import { AppDispatch, RootState } from '@/redux/store';
 import { useRouter } from 'expo-router';
@@ -40,9 +41,9 @@ const SignupScreen: React.FC = () => {
         <View style={styles.container}>
           <View style={styles.inputContainer}>
             <Image source={logo} style={styles.logo} />
-            <TextInput style={styles.inputs} placeholder="이름" value={name} onChangeText={setName} />
-            <TextInput style={styles.inputs} placeholder="이메일" value={email} onChangeText={setEmail} keyboardType="email-address" />
-            <TextInput style={styles.inputs} placeholder="비밀번호" value={password} onChangeText={setPassword} secureTextEntry />
+            <CustomTextInput placeholder="이름" value={name} onChangeText={setName} />
+            <CustomTextInput placeholder="이메일" value={email} onChangeText={setEmail} keyboardType="email-address" />
+            <CustomTextInput placeholder="비밀번호" value={password} onChangeText={setPassword} secureTextEntry />
             <Button name='signup' onPress={handleSignup} disabled={loading} />
             {error && <Text style={styles.errorText}>{error}</Text>}
           </View>
@@ -72,15 +73,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5, 
     elevation: 3,
-  },
-  inputs: {
-    width: "100%",
-    padding: 20,
-    marginBottom: 10,
-    borderRadius: 5,
-    backgroundColor: "#FAFAFA",
-    borderWidth: 1,
-    borderColor: "#E5E5E5",
   },
   logo: {
     width: 400,
