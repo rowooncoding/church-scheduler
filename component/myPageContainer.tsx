@@ -1,20 +1,25 @@
+import { ReactNode } from 'react';
 import { StyleSheet, Text, TextInput, TextInputProps, View } from 'react-native';
 
-interface CustomTextInputProps extends TextInputProps {
+interface MyPageConainerProps {
+  children?: ReactNode;
   style?: object;
 }
 
-const MyPageContainer: React.FC<CustomTextInputProps> = ({ style, ...props }) => {
-    return <View style={[styles.container, style]} {...props}>
-      <Text>hello</Text>
-    </View>
+const MyPageContainer: React.FC<MyPageConainerProps> = ({ style, children,...props}) => {
+    return (
+      <View style={[styles.container, style]} {...props}>
+        <Text>{children}</Text>
+      </View>
+    )
 }
 
 const styles = StyleSheet.create({
   container: {
     width: "100%",
     padding: 20,
-    backgroundColor: "#D3D3D3",
+    backgroundColor: "#E5E5E5",
+    borderRadius: 10,
   },
 })
 

@@ -114,8 +114,9 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<AuthState>) => {
-      return action.payload;
+    setUser: (state, action: PayloadAction<{ id :string; name: string; email: string; }>) => {
+      console.log("🔥 Redux setUser 실행:", action.payload);
+      state.user = action.payload;
     },
     clearUser: () => initialState,
   },  
@@ -140,8 +141,10 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
+        console.log("🔥 Redux 로그인 완료, 저장된 유저:", action.payload);
         state.loading = false;
-        state.user = action.payload;
+        state.user = action.payload.user;
+        state.token = action.payload.token
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;

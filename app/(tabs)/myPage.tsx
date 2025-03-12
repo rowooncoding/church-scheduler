@@ -4,12 +4,17 @@ import React from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native';
 import { useDispatch } from "react-redux";
 import { logoutUser } from '@/redux/authSlice';
-import { AppDispatch } from '@/redux/store';
+import { AppDispatch, RootState } from '@/redux/store';
 import MyPageContainer from '@/component/myPageContainer';
+import { useSelector } from "react-redux";
 
 const MyPageScreen: React.FC = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
+
+  const user = useSelector((state: RootState) => state.auth.user);
+  console.log("리덕스로 받아온 : ", user);
+  const userName = user?.name || '사용자';
 
   const handleLogout = async() => {
     try {
@@ -27,7 +32,9 @@ const MyPageScreen: React.FC = () => {
     <View style={styles.container}>
       <MyPageContainer 
         style={styles.customContainer}
-      />
+      >
+        {userName}
+      </MyPageContainer>
       <Button 
         name="logout"
         onPress={handleLogout}
