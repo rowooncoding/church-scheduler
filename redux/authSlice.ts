@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createAsyncThunk, createSlice, isRejectedWithValue } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, isRejectedWithValue, PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthState {
   user: null | {
@@ -113,7 +113,12 @@ export const logoutUser = createAsyncThunk<void, void>(
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    setUser: (state, action: PayloadAction<AuthState>) => {
+      return action.payload;
+    },
+    clearUser: () => initialState,
+  },  
   extraReducers: (builder) => {
     builder
       // 회원가입
@@ -150,4 +155,5 @@ const authSlice = createSlice({
   },
 });
 
+export const { setUser, clearUser } = authSlice.actions;
 export default authSlice.reducer;
