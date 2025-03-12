@@ -116,6 +116,7 @@ const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // 회원가입
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -128,6 +129,20 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
+      // 로그인
+      .addCase(loginUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      // 로그아웃
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
         state.token = null; 

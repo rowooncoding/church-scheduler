@@ -1,12 +1,12 @@
-import { ActivityIndicator, Pressable, StyleProp, StyleSheet, Text } from 'react-native';
+import { ActivityIndicator, Pressable, StyleProp, StyleSheet, Text, TextStyle, ViewStyle } from 'react-native';
 
 interface ButtonProps {
   name: 'login'|'signup'|'logout'|'default';
   onPress: () => void;
   loading?: boolean;
   disabled?: boolean;
-  style?: object;
-  textStyle?: object;
+  style?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -32,11 +32,15 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <Pressable
-      style={[defaultStyle, style, disabled && styles.disabledButton]}
+      style={[defaultStyle, style, (disabled || loading) && styles.disabledButton]}
       onPress={onPress}
       disabled={disabled || loading}
     >
-      {loading ? <ActivityIndicator color="#FFFFFF" /> : <Text style={[styles.buttonText, textStyle]}>{title}</Text>}
+      {loading ? (
+        <ActivityIndicator color="#FFFFFF" />
+      ) : (
+        <Text style={[styles.buttonText, textStyle]}>{title}</Text>
+      )}
     </Pressable>
   )
 }

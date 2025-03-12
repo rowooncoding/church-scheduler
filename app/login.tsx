@@ -16,10 +16,19 @@ const LoginScreen: React.FC = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [churchCode, setChurchCode] = useState("");
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert("오류", "이메일과 비밀번호를 입력해주세요.");
+      Alert.alert("이메일과 비밀번호를 입력해주세요.");
+      return;
+    }
+
+    if (!churchCode) {
+      Alert.alert("지급받으신 교회 코드를 입력해주세요");
+      return;
+    } else if (churchCode !== 'ahaba') {
+      Alert.alert("올바른 교회 코드를 입력해주세요");
       return;
     }
 
@@ -47,7 +56,8 @@ const LoginScreen: React.FC = () => {
             <Image source={logo} style={styles.logo} />
             <CustomTextInput placeholder="이메일" value={email} onChangeText={setEmail} keyboardType="email-address" />
             <CustomTextInput placeholder="비밀번호" value={password} onChangeText={setPassword} secureTextEntry />
-            <Button name='login' onPress={handleLogin} disabled={loading} />
+            <CustomTextInput placeholder="교회코드" value={churchCode} onChangeText={setChurchCode} secureTextEntry />
+            <Button name='login' onPress={handleLogin} loading={loading} />
             {error && <Text style={styles.errorText}>{error}</Text>}
             <Link href="/signup" style={styles.signupText}>회원가입</Link>
           </View>
