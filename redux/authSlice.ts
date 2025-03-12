@@ -24,15 +24,11 @@ export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async ({ email, password }: { email: string; password: string }, { rejectWithValue }) => {
     try {
-      console.log("🔥 Redux 비동기 액션 실행 중...");
-
       const response = await fetch("https://church-scheduler-server.onrender.com/api/users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
-      console.log("🔥 서버 응답 수신 완료", response);
 
       const contentType = response.headers.get("content-type");
 
@@ -51,8 +47,6 @@ export const loginUser = createAsyncThunk(
       }
 
       await AsyncStorage.setItem("jwt_token", data.token);
-
-      console.log("✅ 로그인 성공!", data);
 
       return data;
     } catch (error: any) {
@@ -104,7 +98,6 @@ export const logoutUser = createAsyncThunk<void, void>(
     try {
       await AsyncStorage.removeItem("jwt_token");
     } catch (error: any) {
-      console.log("❌ 로그아웃 오류 발생:", error.message);
       return rejectWithValue(error.message);
     }
 });
@@ -115,7 +108,6 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<{ id :string; name: string; email: string; }>) => {
-      console.log("🔥 Redux setUser 실행:", action.payload);
       state.user = action.payload;
     },
     clearUser: () => initialState,
@@ -141,7 +133,6 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        console.log("🔥 Redux 로그인 완료, 저장된 유저:", action.payload);
         state.loading = false;
         state.user = action.payload.user;
         state.token = action.payload.token

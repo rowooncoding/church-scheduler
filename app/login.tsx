@@ -33,18 +33,12 @@ const LoginScreen: React.FC = () => {
       return;
     }
 
-    console.log("🚀 로그인 요청 시작");
-
     const resultAction = await dispatch(loginUser({ email, password }));
 
-    console.log("🔥 Redux 액션 실행 완료:", resultAction);
-
     if (loginUser.fulfilled.match(resultAction)) {
-      console.log("✅ 로그인 성공! 홈 화면으로 이동");
       Alert.alert("로그인 성공!", "홈 화면으로 이동합니다.");
       router.replace("/(tabs)"); // ✅ 로그인 성공 시 홈으로 이동
     } else {
-      console.log("❌ 로그인 실패: ", resultAction.payload);
       Alert.alert("로그인 실패", typeof resultAction.payload === 'string' ? resultAction.payload : "로그인 중 오류가 발생했습니다.");
     }
   };

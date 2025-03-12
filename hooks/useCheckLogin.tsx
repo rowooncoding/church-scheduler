@@ -23,7 +23,6 @@ export default function useCheckLogin() {
 
           if (response.ok) {
             const userData = await response.json();
-            console.log("저장된 유저 데이터", userData);
             dispatch(setUser(userData)); // ✅ Redux에 유저 정보 저장
             if (isMounted) router.replace("/(tabs)"); // ✅ 홈으로 이동
           } else {

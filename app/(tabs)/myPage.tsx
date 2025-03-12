@@ -13,7 +13,6 @@ const MyPageScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const user = useSelector((state: RootState) => state.auth.user);
-  console.log("리덕스로 받아온 : ", user);
   const userName = user?.name || '사용자';
 
   const handleLogout = async() => {
