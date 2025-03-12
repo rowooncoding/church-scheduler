@@ -1,5 +1,6 @@
 import Button from '@/component/Button';
 import CustomTextInput from '@/component/CustomTextInput';
+import LabeledInput from '@/component/LabledInput';
 import { registerUser } from '@/redux/authSlice';
 import { AppDispatch, RootState } from '@/redux/store';
 import { useRouter } from 'expo-router';
@@ -41,9 +42,19 @@ const SignupScreen: React.FC = () => {
         <View style={styles.container}>
           <View style={styles.inputContainer}>
             <Image source={logo} style={styles.logo} />
-            <CustomTextInput placeholder="이름" value={name} onChangeText={setName} />
-            <CustomTextInput placeholder="이메일" value={email} onChangeText={setEmail} keyboardType="email-address" />
-            <CustomTextInput placeholder="비밀번호" value={password} onChangeText={setPassword} secureTextEntry />
+
+            <LabeledInput label='이름'>
+              <CustomTextInput placeholder="이름" value={name} onChangeText={setName} />
+            </LabeledInput>
+
+            <LabeledInput label='이메일'>
+              <CustomTextInput placeholder="이메일" value={email} onChangeText={setEmail} keyboardType="email-address" />
+            </LabeledInput>
+
+            <LabeledInput label='비밀번호'>
+              <CustomTextInput placeholder="비밀번호" value={password} onChangeText={setPassword} secureTextEntry />
+            </LabeledInput>
+            
             <Button name='signup' onPress={handleSignup} disabled={loading} />
             {error && <Text style={styles.errorText}>{error}</Text>}
           </View>

@@ -1,5 +1,6 @@
 import Button from '@/component/Button';
 import CustomTextInput from '@/component/CustomTextInput';
+import LabeledInput from '@/component/LabledInput';
 import { loginUser } from '@/redux/authSlice';
 import { AppDispatch, RootState } from '@/redux/store';
 import { Link, useRouter } from 'expo-router';
@@ -54,9 +55,19 @@ const LoginScreen: React.FC = () => {
         <View style={styles.container}>
           <View style={styles.inputContainer}>
             <Image source={logo} style={styles.logo} />
-            <CustomTextInput placeholder="이메일" value={email} onChangeText={setEmail} keyboardType="email-address" />
-            <CustomTextInput placeholder="비밀번호" value={password} onChangeText={setPassword} secureTextEntry />
-            <CustomTextInput placeholder="교회코드" value={churchCode} onChangeText={setChurchCode} secureTextEntry />
+
+              <LabeledInput label='이메일'>
+                <CustomTextInput placeholder="이메일" value={email} onChangeText={setEmail} keyboardType="email-address" />
+              </LabeledInput>
+            
+              <LabeledInput label='비밀번호'>
+                <CustomTextInput placeholder="비밀번호" value={password} onChangeText={setPassword} secureTextEntry />
+              </LabeledInput>
+
+              <LabeledInput label='교회코드'>
+                <CustomTextInput placeholder="교회코드" value={churchCode} onChangeText={setChurchCode} />
+              </LabeledInput>
+            
             <Button name='login' onPress={handleLogin} loading={loading} />
             {error && <Text style={styles.errorText}>{error}</Text>}
             <Link href="/signup" style={styles.signupText}>회원가입</Link>

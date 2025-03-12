@@ -5,6 +5,7 @@ import { View, Text, StyleSheet, Alert } from 'react-native';
 import { useDispatch } from "react-redux";
 import { logoutUser } from '@/redux/authSlice';
 import { AppDispatch } from '@/redux/store';
+import MyPageContainer from '@/component/myPageContainer';
 
 const MyPageScreen: React.FC = () => {
   const router = useRouter();
@@ -24,6 +25,9 @@ const MyPageScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <MyPageContainer 
+        style={styles.customContainer}
+      />
       <Button 
         name="logout"
         onPress={handleLogout}
@@ -51,6 +55,9 @@ const styles = StyleSheet.create({
   customText: {
     fontSize: 18,
   },
+  customContainer: {
+    width: "80%",
+  }
 });
 
 export default MyPageScreen;
