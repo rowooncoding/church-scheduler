@@ -32,7 +32,7 @@ const MyPageScreen: React.FC = () => {
       <MyPageContainer 
         style={styles.customContainer}
       >
-        {userName}
+        {userName}님 샬롬!
       </MyPageContainer>
       <Button 
         name="logout"
@@ -63,6 +63,8 @@ const styles = StyleSheet.create({
   },
   customContainer: {
     width: "80%",
+    alignItems: "center",
+    justifyContent: "center"
   }
 });
 
