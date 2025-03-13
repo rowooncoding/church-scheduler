@@ -37,7 +37,7 @@ const SignupScreen: React.FC = () => {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <TouchableWithoutFeedback onPress={Platform.OS === "web" ? undefined : Keyboard.dismiss} accessible={false}>
       <KeyboardAvoidingView style={styles.avoidContainer} behavior={Platform.OS === "ios" ? "padding" : "height"}>
         <View style={styles.container}>
           <View style={styles.inputContainer}>

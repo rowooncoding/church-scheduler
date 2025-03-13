@@ -5,7 +5,7 @@ import { loginUser } from '@/redux/authSlice';
 import { AppDispatch, RootState } from '@/redux/store';
 import { Link, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View, Image, Pressable, Alert, ActivityIndicator } from "react-native";
+import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View, Image, Pressable, Alert, ActivityIndicator, ScrollView } from "react-native";
 import { useDispatch, useSelector } from 'react-redux';
 
 const logo = require("@/assets/images/ahaba-logo.png");
@@ -44,30 +44,33 @@ const LoginScreen: React.FC = () => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <KeyboardAvoidingView style={styles.avoidContainer} behavior={Platform.OS === "ios" ? "padding" : "height"}>
-        <View style={styles.container}>
-          <View style={styles.inputContainer}>
-            <Image source={logo} style={styles.logo} />
+    <TouchableWithoutFeedback onPress={Platform.OS === "web" ? undefined : Keyboard.dismiss} accessible={false}>
+        <KeyboardAvoidingView
+          style={styles.avoidContainer}
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+        >
+          <View style={styles.container}>
+            <View style={styles.inputContainer}>
+              <Image source={logo} style={styles.logo} />
 
-              <LabeledInput label='이메일'>
-                <CustomTextInput placeholder="이메일" value={email} onChangeText={setEmail} keyboardType="email-address" />
-              </LabeledInput>
-            
-              <LabeledInput label='비밀번호'>
-                <CustomTextInput placeholder="비밀번호" value={password} onChangeText={setPassword} secureTextEntry />
-              </LabeledInput>
+                <LabeledInput label='이메일'>
+                  <CustomTextInput placeholder="이메일" value={email} onChangeText={setEmail} keyboardType="email-address" />
+                </LabeledInput>
+              
+                <LabeledInput label='비밀번호'>
+                  <CustomTextInput placeholder="비밀번호" value={password} onChangeText={setPassword} secureTextEntry />
+                </LabeledInput>
 
-              <LabeledInput label='교회코드'>
-                <CustomTextInput placeholder="교회코드" value={churchCode} onChangeText={setChurchCode} />
-              </LabeledInput>
-            
-            <Button name='login' onPress={handleLogin} loading={loading} />
-            {error && <Text style={styles.errorText}>{error}</Text>}
-            <Link href="/signup" style={styles.signupText}>회원가입</Link>
+                <LabeledInput label='교회코드'>
+                  <CustomTextInput placeholder="교회코드" value={churchCode} onChangeText={setChurchCode} />
+                </LabeledInput>
+              
+              <Button name='login' onPress={handleLogin} loading={loading} />
+              {error && <Text style={styles.errorText}>{error}</Text>}
+              <Link href="/signup" style={styles.signupText}>회원가입</Link>
+            </View>
           </View>
-        </View>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
 };
