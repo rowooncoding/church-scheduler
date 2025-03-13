@@ -1,10 +1,10 @@
-import { Text, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 
 const Home: React.FC = () => {
   return (
-    <View>
+    <ScrollView>
       <Text>Home</Text>
-    </View>
+    </ScrollView>
   );
 };
 
