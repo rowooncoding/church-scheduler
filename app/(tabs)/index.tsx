@@ -38,11 +38,34 @@ const Home: React.FC = () => {
     setItems(newItems);
   }
 
+  // 일정이 존재하는 날짜에 . 표시
+  const getMarkedDates = () => {
+    const marked: { [key: string]: any } = {};
+
+    // 일정이 있는 날짜에 점 추가
+    Object.keys(items).forEach((date) => {
+      if (items[date].length > 0) {
+        marked[date] = { marked: true, dotColor: "blue" };
+      }
+    });
+
+    // 선택된 날짜 스타일 추가
+    marked[selectedDate] = {
+      ...marked[selectedDate],
+      selected: true,
+      selectedColor: "blue",
+      selectedTextColor: "white",
+    };
+
+    return marked;
+  };
+
   return (
     <View style={styles.container}>
       <Agenda
         items={getAgendaItems()}
         selected={selectedDate}
+        markedDates={getMarkedDates()}
         loadItemsForMonth={loadItemsForMonth}
         onDayPress={(day: DateData) => setSelectedDate(day.dateString)}
         renderItem={(item: any) => (
